@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHALK — Strength</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080808;
+      --bone:    #dcdcdc;
+      --ink:     #f2f2f0;
+      --hairline: rgba(255,255,255,.12);
+      --sans: 'Inter Tight', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+
+    /* ── Loading overlay ─────────────────────────────────────────── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--bone);
+      opacity: 1;
+      transition: opacity .7s ease;
+    }
+    #loader.gone { opacity: 0; pointer-events: none; }
+
+    /* ── Fixed nav ───────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 36px;
+      pointer-events: none;
+    }
+
+    .nav-wordmark {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--bone);
+      pointer-events: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      pointer-events: auto;
+    }
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--bone); }
+
+    .nav-cta {
+      pointer-events: auto;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--bone);
+      border: 1px solid rgba(220,220,220,.4);
+      border-radius: 100px;
+      padding: 9px 20px;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .nav-cta:hover { background: var(--bone); color: var(--bg); }
+
+    /* ── Fixed HUD — scrub rail ──────────────────────────────────── */
+    #hud {
+      position: fixed;
+      bottom: 36px;
+      left: 36px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    #pct {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.45);
+    }
+    #rail-wrap {
+      width: 80px;
+      height: 1px;
+      background: var(--hairline);
+      position: relative;
+    }
+    #rail-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--bone);
+      transition: none;
+    }
+
+    /* ── Fixed spec row ──────────────────────────────────────────── */
+    #spec-row {
+      position: fixed;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 28px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #spec-row span { display: flex; align-items: center; gap: 8px; }
+    #spec-row span::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+    }
+
+    /* ── Stage ───────────────────────────────────────────────────── */
+    .stage {
+      position: relative;
+      height: 700vh;
+    }
+
+    .sticky-child {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Video ───────────────────────────────────────────────────── */
+    #film {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Overlays ────────────────────────────────────────────────── */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 220px 90px rgba(0,0,0,.85);
+      pointer-events: none;
+    }
+
+    .scrim-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 28vh;
+      background: linear-gradient(to bottom, rgba(0,0,0,.82), transparent);
+      pointer-events: none;
+    }
+
+    .scrim-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40vh;
+      background: linear-gradient(to top, rgba(0,0,0,.92), transparent);
+      pointer-events: none;
+    }
+
+    /* ── Caption beats ───────────────────────────────────────────── */
+    .beat {
+      position: absolute;
+      left: 36px;
+      right: 36px;
+      opacity: 0;
+      transition: opacity .55s ease;
+      pointer-events: none;
+    }
+    .beat.on { opacity: 1; }
+
+    .beat h1,
+    .beat h2 {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: clamp(30px, 4.6vw, 64px);
+      letter-spacing: -.035em;
+      line-height: 1.05;
+      color: var(--ink);
+      text-shadow:
+        0 2px 40px rgba(0,0,0,.9),
+        0 1px 8px rgba(0,0,0,.8);
+    }
+
+    /* beat 1 — upper third */
+    #beat-1 { top: 22vh; }
+    /* beat 2 — lower */
+    #beat-2 { bottom: 22vh; }
+    /* beat 3 — lower */
+    #beat-3 { bottom: 22vh; }
+
+    /* ── Closing section ─────────────────────────────────────────── */
+    .closing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      background: var(--bg);
+      padding: 80px 24px;
+    }
+
+    .closing-line {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: clamp(22px, 3vw, 42px);
+      letter-spacing: -.025em;
+      color: rgba(255,255,255,.18);
+      text-align: center;
+      max-width: 540px;
+    }
+
+    .cta-solid {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--bone);
+      border: none;
+      border-radius: 100px;
+      padding: 16px 40px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .cta-solid:hover { opacity: .85; }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 820px) {
+      .nav-links { display: none; }
+      #spec-row  { display: none; }
+    }
+
+    /* ── Reduced motion ──────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .stage {
+        height: auto;
+      }
+      .sticky-child {
+        position: static;
+        height: auto;
+        aspect-ratio: 16 / 9;
+      }
+      #film {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      /* Show all beats at once */
+      .beat {
+        position: relative;
+        opacity: 1;
+        padding: 24px 0;
+        left: auto; right: auto;
+        bottom: auto; top: auto;
+      }
+      /* Stack beats in a simple column inside a wrapper */
+      .beats-reduced {
+        padding: 32px 36px;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading overlay -->
+  <div id="loader">Loading</div>
+
+  <!-- Fixed nav -->
+  <nav>
+    <span class="nav-wordmark">CHALK</span>
+    <ul class="nav-links">
+      <li><a href="#">Method</a></li>
+      <li><a href="#">Coaches</a></li>
+      <li><a href="#">Membership</a></li>
+      <li><a href="#">Visit</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Start training</a>
+  </nav>
+
+  <!-- Fixed HUD -->
+  <div id="hud">
+    <span id="pct">00</span>
+    <div id="rail-wrap">
+      <div id="rail-fill"></div>
+    </div>
+  </div>
+
+  <!-- Fixed spec row -->
+  <div id="spec-row">
+    <span>4:45 doors open</span>
+    <span>0 mirrors</span>
+    <span>1 rule</span>
+  </div>
+
+  <!-- ── Stage ─────────────────────────────────────────────────────── -->
+  <section class="stage" id="stage">
+    <div class="sticky-child" id="sticky">
+
+      <!-- Video — src set via Blob after fetch -->
+      <video id="film" muted playsinline preload="auto"></video>
+
+      <!-- Overlays -->
+      <div class="vignette"></div>
+      <div class="scrim-top"></div>
+      <div class="scrim-bottom"></div>
+
+      <!-- Caption beats -->
+      <!-- Beat 1: 0.00 – 0.14, upper third -->
+      <div class="beat" id="beat-1">
+        <h1>Before the lift.</h1>
+      </div>
+
+      <!-- Beat 2: 0.24 – 0.38, lower -->
+      <div class="beat" id="beat-2">
+        <h2>Five in the morning.<br>Empty room.</h2>
+      </div>
+
+      <!-- Beat 3: 0.72 – 0.88, lower -->
+      <div class="beat" id="beat-3">
+        <h2>The dust is the receipt.</h2>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Closing section ───────────────────────────────────────────── -->
+  <section class="closing">
+    <p class="closing-line">The bar doesn't care how you feel.</p>
+    <a href="#" class="cta-solid">Start training</a>
+  </section>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const VIDEO_SRC = 'https://zxdefgavgwfxastwmmjm.supabase.co/storage/v1/object/public/assets/chalk.mp4';
+
+      const film    = document.getElementById('film');
+      const loader  = document.getElementById('loader');
+      const stage   = document.getElementById('stage');
+      const railFill = document.getElementById('rail-fill');
+      const pctEl   = document.getElementById('pct');
+
+      const beat1 = document.getElementById('beat-1');
+      const beat2 = document.getElementById('beat-2');
+      const beat3 = document.getElementById('beat-3');
+
+      /* ── Caption beat windows ─────────────────────────── */
+      const BEATS = [
+        { el: beat1, from: 0.00, to: 0.14 },
+        { el: beat2, from: 0.24, to: 0.38 },
+        { el: beat3, from: 0.72, to: 0.88 },
+      ];
+
+      /* ── Reduced-motion: static mode ────────────────────
+         Under prefers-reduced-motion we don't scrub at all;
+         all beats are shown, video gets normal controls.    */
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduceMotion) {
+        BEATS.forEach(b => b.el.classList.add('on'));
+        // Wrap beats in a readable block below the video
+        const wrapper = document.createElement('div');
+        wrapper.className = 'beats-reduced';
+        BEATS.forEach(b => wrapper.appendChild(b.el));
+        document.querySelector('.sticky-child').after(wrapper);
+      }
+
+      /* ── Fetch video as Blob (bypasses byte-range issues) */
+      fetch(VIDEO_SRC)
+        .then(r => {
+          if (!r.ok) throw new Error('fetch failed ' + r.status);
+          return r.blob();
+        })
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          film.src = url;
+          film.load();
+        })
+        .catch(err => {
+          console.warn('Blob fetch failed, falling back to direct src', err);
+          film.src = VIDEO_SRC;
+          film.load();
+        });
+
+      /* ── Wait for loadeddata, then reveal ────────────── */
+      film.addEventListener('loadeddata', function onLoaded () {
+        film.removeEventListener('loadeddata', onLoaded);
+        // Pin to first frame
+        film.currentTime = 0;
+        // Fade out loader
+        loader.classList.add('gone');
+        // Start scrub loop only if motion is allowed
+        if (!reduceMotion) startScrubLoop();
+      }, { once: true });
+
+      /* ── Scrub loop ──────────────────────────────────── */
+      function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+
+      let targetProgress = 0;
+      let currentProgress = 0;
+
+      function startScrubLoop () {
+        function tick () {
+          const stageRect  = stage.getBoundingClientRect();
+          const stageH     = stage.offsetHeight;
+          const viewH      = window.innerHeight;
+
+          targetProgress = clamp(-stageRect.top / (stageH - viewH), 0, 1);
+
+          // Ease toward target
+          currentProgress += (targetProgress - currentProgress) * 0.12;
+
+          // Seek video — only when delta is meaningful
+          if (film.duration && film.duration > 0) {
+            const desired = currentProgress * (film.duration - 0.05);
+            if (Math.abs(film.currentTime - desired) > 0.005) {
+              film.currentTime = desired;
+            }
+          }
+
+          // Update HUD
+          const pct = Math.round(currentProgress * 100);
+          pctEl.textContent = String(pct).padStart(2, '0');
+          railFill.style.width = (currentProgress * 100).toFixed(2) + '%';
+
+          // Update beats
+          BEATS.forEach(b => {
+            const inside = currentProgress >= b.from && currentProgress <= b.to;
+            b.el.classList.toggle('on', inside);
+          });
+
+          requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+    })();
+  </script>
+
+</body>
+</html>
