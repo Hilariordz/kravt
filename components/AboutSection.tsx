@@ -1,123 +1,87 @@
-import React from 'react';
+"use client";
 
-// Importación de imágenes (TypeScript reconoce estas rutas si tienes configurado el módulo de assets)
-import aboutImage from '../assets/about-hero.jpg';
-import avatar1 from '../assets/avatar1.jpg';
-import avatar2 from '../assets/avatar2.jpg';
-import avatar3 from '../assets/avatar3.jpg';
+import { motion } from "framer-motion";
 
-export const AboutSection: React.FC = () => {
-  const avatars: string[] = [avatar1, avatar2, avatar3];
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+};
 
+export default function AboutSection() {
   return (
-    <section className="w-full bg-white py-16 px-4 sm:px-6 lg:px-8 font-sans text-gray-900">
-      <div className="max-w-6xl mx-auto">
-        
-        {/* Badge Superior */}
-        <div className="flex justify-center mb-4">
-          <div className="inline-flex items-center gap-2 bg-lime-300 text-black px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase">
-            <svg 
-              className="w-4 h-4" 
-              viewBox="0 0 24 24" 
-              fill="currentColor"
-              aria-hidden="true"
+    <section style={{ width: "100%", background: "#fff", padding: "80px 24px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div
+          className="about-grid"
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}
+        >
+          <motion.div
+            style={{ borderRadius: 16, overflow: "hidden", aspectRatio: "3/4", background: "#f0f0f0" }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" as const }}
+          >
+            <img src="/atleta.png" alt="Atleta" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
+          </motion.div>
+
+          <motion.div
+            style={{ display: "flex", flexDirection: "column", gap: 24 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+          >
+            <motion.div variants={fadeUp} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{
+                width: 20, height: 20, borderRadius: "50%", background: "#CCFF00",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="black">
+                  <path d="M12 2a4 4 0 00-4 4v1H6a2 2 0 00-2 2v11a4 4 0 004 4h8a4 4 0 004-4V9a2 2 0 00-2-2h-2V6a4 4 0 00-4-4zm-2 5V6a2 2 0 114 0v1h-4z" />
+                </svg>
+              </span>
+              <span style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#111" }}>
+                Por qué elegirnos
+              </span>
+            </motion.div>
+
+            <motion.h2
+              variants={fadeUp}
+              style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: "clamp(44px, 5.5vw, 76px)", letterSpacing: ".03em", lineHeight: 1.0, color: "#111", margin: 0 }}
             >
-              <path d="M12 2a4 4 0 00-4 4v1H6a2 2 0 00-2 2v11a4 4 0 004 4h8a4 4 0 004-4V9a2 2 0 00-2-2h-2V6a4 4 0 00-4-4zm-2 5V6a2 2 0 114 0v1h-4z" />
-            </svg>
-            <span>ABOUT US</span>
-          </div>
-        </div>
+              TRANSFORMANDO VIDAS<br />A TRAVÉS DEL FITNESS
+            </motion.h2>
 
-        {/* Encabezado Principal */}
-        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-center uppercase tracking-tight max-w-4xl mx-auto leading-tight mb-16">
-          WE BELIEVE FITNESS ISN’T JUST ABOUT LIFTING WEIGHTS IT’S ABOUT BUILDING
-        </h2>
+            <motion.p variants={fadeUp} style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 13, color: "#888", lineHeight: 1.7, maxWidth: 400, margin: 0 }}>
+              Estamos dedicados a ayudarte a alcanzar tus metas de fitness con orientación experta, instalaciones modernas y un ambiente motivador.
+            </motion.p>
 
-        {/* Contenido en 2 Columnas */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
-          {/* Columna Izquierda: Métricas y Texto */}
-          <div className="flex flex-col justify-center">
-            
-            {/* Stat: 15+ Experience */}
-            <div className="flex items-baseline gap-4 mb-6">
-              <span className="text-6xl md:text-7xl font-black tracking-tight leading-none">
-                15+
-              </span>
-              <span className="text-xs font-bold uppercase tracking-wider leading-tight max-w-[120px] text-gray-900">
-                PROFESSIONAL<br />EXPERIENCE
-              </span>
-            </div>
-
-            <hr className="border-gray-200 mb-6" />
-
-            {/* Párrafos descriptivos */}
-            <div className="space-y-4 text-gray-500 text-sm leading-relaxed mb-8">
-              <p>
-                We combine advanced training techniques, personalized programs, and cutting-edge equipment to deliver a premium fitness experience. Whether your goal is strength.
-              </p>
-              <p>
-                We don't just train bodies — we train mindsets. Step inside and experience a fitness journey built around focus.
-              </p>
-            </div>
-
-            {/* Fila Inferior: Botón CTA y Reviews */}
-            <div className="flex flex-wrap items-center gap-6">
-              
-              {/* Botón About Us */}
-              <button 
-                type="button"
-                className="inline-flex items-center gap-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold px-6 py-3 rounded-full transition-colors text-xs tracking-wider uppercase cursor-pointer"
-              >
-                <span>ABOUT US</span>
-                <span className="w-7 h-7 bg-black text-white rounded-full flex items-center justify-center text-xs">
-                  &gt;&gt;
-                </span>
-              </button>
-
-              {/* Reviews y Avatares */}
-              <div className="flex items-center gap-3">
-                {/* Avatares superpuestos */}
-                <div className="flex -space-x-2">
-                  {avatars.map((imgSrc: string, index: number) => (
-                    <img
-                      key={index}
-                      src={imgSrc}
-                      alt={`User Reviewer Avatar ${index + 1}`}
-                      className="w-9 h-9 rounded-full border-2 border-white object-cover"
-                    />
-                  ))}
+            <motion.div variants={fadeUp} style={{ display: "flex", alignItems: "flex-end", gap: 32, marginTop: 8 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 20, flex: 1 }}>
+                <div>
+                  <div style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: "clamp(48px, 6vw, 70px)", letterSpacing: ".02em", lineHeight: 1, color: "#111" }}>50+</div>
+                  <div style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 10, fontWeight: 800, letterSpacing: ".15em", textTransform: "uppercase", color: "#aaa", marginTop: 4 }}>Entrenadores Certificados</div>
                 </div>
-
-                {/* Estrellas y Conteo */}
-                <div className="flex flex-col">
-                  <div className="flex text-amber-400 text-sm">
-                    {'★'.repeat(5)}
-                  </div>
-                  <span className="text-xs text-gray-500 font-medium">
-                    (1k+ Reviews)
-                  </span>
+                <div>
+                  <div style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: "clamp(48px, 6vw, 70px)", letterSpacing: ".02em", lineHeight: 1, color: "#111" }}>95%</div>
+                  <div style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 10, fontWeight: 800, letterSpacing: ".15em", textTransform: "uppercase", color: "#aaa", marginTop: 4 }}>Tasa de Satisfacción de Miembros</div>
                 </div>
               </div>
 
-            </div>
-
-          </div>
-
-          {}
-          <div className="relative">
-            <img
-              src={aboutImage}
-              alt="Fitness Athlete with Shaker"
-              className="w-full h-[450px] md:h-[520px] object-cover rounded-2xl shadow-sm"
-            />
-          </div>
-
+              <div style={{ width: 140, height: 170, borderRadius: 12, overflow: "hidden", background: "#e0e0e0", flexShrink: 0 }}>
+                <img src="/atleta2.png" alt="Entrenadora" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
-
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .about-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
-};
-
-export default AboutSection;
+}

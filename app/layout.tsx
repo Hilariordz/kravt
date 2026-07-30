@@ -21,7 +21,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CHALK — Strength",
+  title: "KRAVT — Strength",
   description: "Antes del levantamiento.",
 };
 
