@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
 
 const PLANS = [
@@ -15,11 +15,12 @@ const PLANS = [
     period: "/mes",
     sub: "Clase de prueba gratis para nuevos miembros",
     accent: false,
+    image: "/atleta.png",
     features: [
-      "Acceso a todo el equipo",
-      "2 clases grupales por semana",
-      "Vestuarios y duchas",
-      "App de seguimiento",
+      { icon: "⚡", text: "Acceso a todo el equipo" },
+      { icon: "🏃", text: "2 clases grupales por semana" },
+      { icon: "🔒", text: "Acceso a vestuarios" },
+      { icon: "📱", text: "App de seguimiento" },
     ],
   },
   {
@@ -29,114 +30,207 @@ const PLANS = [
     period: "/mes",
     sub: "Descuentos en membresías anuales",
     accent: true,
+    image: "/atleta.png",
     features: [
-      "Todo lo del plan básico",
-      "Entrenamiento personal ilimitado",
-      "Nutrición personalizada",
-      "Acceso prioritario a clases",
+      { icon: "⚡", text: "Acceso a todo el equipo" },
+      { icon: "🏃", text: "2 clases grupales por semana" },
+      { icon: "🔒", text: "Acceso a vestuarios" },
+      { icon: "📱", text: "Acceso a todo el equipo" },
     ],
   },
 ];
 
 export default function Pricing() {
   return (
-    <section className="w-full bg-[#080808] py-28 px-4 sm:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section style={{ width: "100%", background: "#080808", padding: "48px 24px 80px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
 
-        {/* Badge */}
+        {/* Badge + Heading — left aligned like the image */}
         <motion.div
-          className="flex justify-center mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 56 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
         >
-          <span className="inline-flex items-center gap-2 border border-white/10 text-[#CCFF00] px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] inline-block" />
-            Precios
-          </span>
+          <motion.div variants={fadeUp} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{
+              width: 20, height: 20, borderRadius: "50%", background: "#CCFF00",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="black">
+                <path d="M12 2a4 4 0 00-4 4v1H6a2 2 0 00-2 2v11a4 4 0 004 4h8a4 4 0 004-4V9a2 2 0 00-2-2h-2V6a4 4 0 00-4-4zm-2 5V6a2 2 0 114 0v1h-4z" />
+              </svg>
+            </span>
+            <span style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#CCFF00" }}>
+              Nuestros precios
+            </span>
+          </motion.div>
+
+          <motion.h2
+            variants={fadeUp}
+            style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: "clamp(44px, 5.5vw, 76px)", letterSpacing: ".03em", lineHeight: 1.0, color: "#fff", margin: 0 }}
+          >
+            PAQUETES EXCLUSIVOS<br />DE GYM
+          </motion.h2>
         </motion.div>
 
-        {/* Heading */}
-        <motion.h2
-          className="text-center text-white mb-16 leading-none"
-          style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: "clamp(40px,7vw,96px)", letterSpacing: ".03em" }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-        >
-          Planes exclusivos<br />
-          <span className="text-[#CCFF00]">para tu nivel</span>
-        </motion.h2>
-
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div
+          className="pricing-grid"
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}
+        >
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: i * 0.15 }}
-              className={`rounded-2xl p-8 flex flex-col gap-8 border ${
-                plan.accent
-                  ? "bg-[#CCFF00] text-black border-transparent"
-                  : "bg-[#141414] text-white border-white/5"
-              }`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.15 }}
+              style={{
+                borderRadius: 16,
+                overflow: "hidden",
+                background: plan.accent ? "#CCFF00" : "#161616",
+                border: plan.accent ? "none" : "1px solid rgba(255,255,255,0.07)",
+                display: "grid",
+                gridTemplateColumns: "1fr auto",
+                minHeight: 380,
+              }}
             >
-              {/* Top */}
-              <div>
-                <span
-                  className={`text-[11px] font-black uppercase tracking-widest ${plan.accent ? "text-black/60" : "text-[#CCFF00]"}`}
-                >
-                  {plan.label}
-                </span>
-                <div className="flex items-baseline gap-1 mt-3 mb-1">
-                  <span
-                    style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: 56, letterSpacing: ".02em" }}
-                    className="leading-none"
-                  >
-                    {plan.price}
+              {/* Left content */}
+              <div style={{ padding: "32px 28px 32px 32px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                {/* Top */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span style={{
+                    fontFamily: "var(--font-roboto), sans-serif", fontSize: 11, fontWeight: 800,
+                    letterSpacing: ".14em", textTransform: "uppercase",
+                    color: plan.accent ? "#000" : "#CCFF00",
+                  }}>
+                    {plan.label}
                   </span>
-                  <span className={`text-xs ${plan.accent ? "text-black/50" : "text-white/35"}`}>{plan.period}</span>
+
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginTop: 4 }}>
+                    <span style={{
+                      fontFamily: "var(--font-bebas), sans-serif", fontSize: 52,
+                      letterSpacing: ".02em", lineHeight: 1,
+                      color: plan.accent ? "#000" : "#fff",
+                    }}>
+                      {plan.price}
+                    </span>
+                    <span style={{
+                      fontFamily: "var(--font-roboto), sans-serif", fontSize: 12,
+                      color: plan.accent ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.4)",
+                    }}>
+                      {plan.period}
+                    </span>
+                  </div>
+
+                  <p style={{
+                    fontFamily: "var(--font-roboto), sans-serif", fontSize: 12, lineHeight: 1.5,
+                    color: plan.accent ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.4)",
+                    margin: 0,
+                  }}>
+                    {plan.sub}
+                  </p>
                 </div>
-                <p className={`text-xs leading-snug ${plan.accent ? "text-black/55" : "text-white/35"}`}>{plan.sub}</p>
+
+                {/* CTA Button */}
+                <a
+                  href="#"
+                  style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "space-between",
+                    background: plan.accent ? "#000" : "#fff",
+                    color: plan.accent ? "#fff" : "#000",
+                    fontFamily: "var(--font-roboto), sans-serif", fontWeight: 800,
+                    fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase",
+                    padding: "10px 10px 10px 20px", borderRadius: 999,
+                    textDecoration: "none", width: "100%", boxSizing: "border-box",
+                    marginTop: 8,
+                    transition: "opacity .2s",
+                  }}
+                >
+                  <span>Unirme ahora</span>
+                  <span style={{
+                    width: 32, height: 32, borderRadius: "50%",
+                    background: plan.accent ? "#CCFF00" : "#000",
+                    color: plan.accent ? "#000" : "#fff",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 16, flexShrink: 0,
+                  }}>
+                    »
+                  </span>
+                </a>
+
+                {/* Features */}
+                <div style={{ marginTop: 24 }}>
+                  <p style={{
+                    fontFamily: "var(--font-roboto), sans-serif", fontSize: 11, fontWeight: 800,
+                    letterSpacing: ".12em", textTransform: "uppercase",
+                    color: plan.accent ? "#000" : "#fff",
+                    marginBottom: 14,
+                  }}>
+                    Características:
+                  </p>
+                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                    {plan.features.map((f, fi) => (
+                      <li key={fi} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 13, lineHeight: 1, flexShrink: 0 }}>{f.icon}</span>
+                        <span style={{
+                          fontFamily: "var(--font-roboto), sans-serif", fontSize: 12,
+                          color: plan.accent ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.55)",
+                        }}>
+                          {f.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
-              {/* CTA */}
-              <a
-                href="#"
-                className={`inline-flex items-center justify-between w-full font-bold text-xs uppercase tracking-widest pl-5 pr-1.5 py-2 rounded-full transition-colors ${
-                  plan.accent
-                    ? "bg-black text-white hover:bg-[#111]"
-                    : "bg-[#CCFF00] text-black hover:bg-white"
-                }`}
-              >
-                <span>Unirme ahora</span>
-                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm ${plan.accent ? "bg-[#CCFF00] text-black" : "bg-black text-[#CCFF00]"}`}>
-                  →
-                </span>
-              </a>
-
-              {/* Divider */}
-              <hr className={plan.accent ? "border-black/15" : "border-white/8"} />
-
-              {/* Features */}
-              <ul className="space-y-3">
-                {plan.features.map((f) => (
-                  <li key={f} className={`flex items-center gap-3 text-sm ${plan.accent ? "text-black/75" : "text-white/55"}`}>
-                    <span className={`text-base ${plan.accent ? "text-black" : "text-[#CCFF00]"}`}>✦</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
+              {/* Right image — floating with padding, own border radius */}
+              <div style={{
+                padding: "12px 12px 12px 0",
+                display: "flex",
+                alignItems: "stretch",
+                flexShrink: 0,
+                width: 180,
+              }}>
+                <div style={{
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  flex: 1,
+                  position: "relative",
+                  minHeight: 0,
+                }}>
+                  <img
+                    src={plan.image}
+                    alt={plan.label}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "top center",
+                      display: "block",
+                      filter: plan.accent ? "none" : "brightness(0.75)",
+                    }}
+                  />
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
 
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .pricing-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .pricing-grid > div { grid-template-columns: 1fr !important; }
+          .pricing-grid > div > div:last-child { width: 100% !important; height: 200px; border-radius: 0 0 16px 16px !important; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -9,7 +9,7 @@ const fadeUp = {
 
 export default function AboutSection() {
   return (
-    <section style={{ width: "100%", background: "#fff", padding: "80px 24px" }}>
+    <section style={{ width: "100%", background: "#fff", padding: "48px 24px 80px" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div
           className="about-grid"
