@@ -110,7 +110,7 @@ export default function ChalkScrubber() {
           fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase",
           color: "var(--bone)", border: "1px solid rgba(220,220,220,.4)",
           borderRadius: 100, padding: "9px 20px", textDecoration: "none",
-        }}>Empieza a entrenar</a>
+        }} href="/login">Empieza a entrenar</a>
       </nav>
 
 
