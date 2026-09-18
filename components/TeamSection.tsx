@@ -8,9 +8,9 @@ const fadeUp = {
 };
 
 const TRAINERS = [
-  { name: "Brett Rubio", role: "Trainer", img: "/atleta.png" },
-  { name: "Robin Griffin", role: "Co-Founder", img: "/atleta.png" },
-  { name: "John Smith", role: "Founder", img: "/atleta.png" },
+  { name: "Alejandro Morales", role: "Entrenador", img: "/entrenador.png" },
+  { name: "Sofía Castillo", role: "Co-fundadora", img: "/cofundadora.png" },
+  { name: "Daniel Ramírez", role: "Fundador", img: "/fundador.png" },
 ];
 
 export default function TeamSection() {
@@ -41,7 +41,7 @@ export default function TeamSection() {
                 </svg>
               </span>
               <span style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#CCFF00" }}>
-                Our Trainers
+                Nuestros entrenadores
               </span>
             </motion.div>
 
@@ -49,7 +49,7 @@ export default function TeamSection() {
               variants={fadeUp}
               style={{ fontFamily: "var(--font-bebas), sans-serif", fontSize: "clamp(44px, 5.5vw, 76px)", letterSpacing: ".03em", lineHeight: 1.0, color: "#fff", margin: 0 }}
             >
-              MEET OUR EXPERT<br />TEAM MEMBER
+              CONOCE A NUESTRO<br />EQUIPO EXPERTO
             </motion.h2>
           </motion.div>
 
@@ -69,7 +69,7 @@ export default function TeamSection() {
               textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0, marginTop: 8,
             }}
           >
-            Meet trainer
+            Conoce al entrenador
             <span style={{
               width: 30, height: 30, borderRadius: "50%", background: "#000",
               color: "#CCFF00", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,

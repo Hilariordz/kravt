@@ -60,7 +60,7 @@ export default function ContactSection() {
             {/* Photo */}
             <div style={{ borderRadius: 16, overflow: "hidden", aspectRatio: "4/5", background: "#e8e8e6" }}>
               <img
-                src="/atleta.png"
+                src="/imgform.png"
                 alt="Contacto"
                 style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }}
               />
