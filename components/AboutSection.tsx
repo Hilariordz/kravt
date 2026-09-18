@@ -22,7 +22,7 @@ export default function AboutSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: "easeOut" as const }}
           >
-            <img src="/atleta.png" alt="Atleta" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
+            <img src="/womanfit.png" alt="Atleta" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", display: "block" }} />
           </motion.div>
 
           <motion.div
@@ -70,7 +70,7 @@ export default function AboutSection() {
               </div>
 
               <div style={{ width: 140, height: 170, borderRadius: 12, overflow: "hidden", background: "#e0e0e0", flexShrink: 0 }}>
-                <img src="/atleta2.png" alt="Entrenadora" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <img src="/treineer.png" alt="Entrenadora" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
               </div>
             </motion.div>
           </motion.div>

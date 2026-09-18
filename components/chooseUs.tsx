@@ -60,7 +60,7 @@ export default function ChooseUs() {
             transition={{ duration: 0.7, ease: "easeOut" as const }}
           >
             <img
-              src="/path-to-your-before-image.jpg"
+              src="/1.png"
               alt="Antes"
               style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", filter: "grayscale(1)", display: "block" }}
             />
@@ -84,7 +84,7 @@ export default function ChooseUs() {
             transition={{ duration: 0.7, ease: "easeOut" as const, delay: 0.1 }}
           >
             <img
-              src="/path-to-your-after-image.jpg"
+              src="/2.png"
               alt="Después"
               style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
             />

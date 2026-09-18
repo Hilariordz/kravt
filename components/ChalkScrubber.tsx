@@ -76,15 +76,18 @@ export default function ChalkScrubber() {
   }, [loaded, reducedMotion]);
 
   const pct = String(Math.round(progress * 100)).padStart(2, "0");
-  void pct; // unused — HUD removed
+  void pct; 
 
   return (
     <>
-      {/* ── Fixed nav ─────────────────────────────────────────── */}
+      {}
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "22px 36px", pointerEvents: "none",
+        background: "rgba(8,8,8,.82)",
+        borderBottom: "1px solid rgba(220,220,220,.12)",
+        backdropFilter: "blur(14px)",
       }}>
         <span style={{ pointerEvents: "auto" }}>
           <img
@@ -105,12 +108,12 @@ export default function ChalkScrubber() {
           ))}
         </ul>
 
-        <a href="#" style={{
+        <a href="/login" style={{
           pointerEvents: "auto", fontFamily: "var(--font-roboto), sans-serif",
           fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase",
           color: "var(--bone)", border: "1px solid rgba(220,220,220,.4)",
           borderRadius: 100, padding: "9px 20px", textDecoration: "none",
-        }} href="/login">Empieza a entrenar</a>
+        }}>Empieza a entrenar</a>
       </nav>
 
 

@@ -7,37 +7,39 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
 
-// 3-column bento grid:
-// Row 1: [photo left] [quote center accent] [photo right]
-// Row 2: [quote dark] [photo center] [quote dark]
 const ITEMS = [
-  { type: "photo", src: "/atleta.png", position: "top" },
+  { type: "photo", src: "/darlar.png", position: "top" },
   {
     type: "quote",
     accent: true,
     quote: "Nunca pensé que disfrutaría entrenar así. Este gym lo hizo divertido y desafiante. Los programas personalizados y la atención.",
-    name: "Alexander Lane",
-    role: "Yoga Instructor",
+    name: "Darla Ruiz",
+    role: "Atleta Profesional",
   },
-  { type: "photo", src: "/atleta.png", position: "top" },
+  { type: "photo", src: "/hectormaria.png", position: "top" },
   {
     type: "quote",
     accent: false,
     quote: "Los programas de entrenamiento y la guía nutricional transformaron completamente mi camino. Muy recomendado.",
-    name: "Dominic Lewis",
-    role: "Strength Coach",
+    name: "Hector & Maria",
+    role: "Atletas Profesionales",
   },
-  { type: "photo", src: "/atleta.png", position: "center" },
+  { type: "photo", src: "/marcot.png", position: "center" },
   {
     type: "quote",
     accent: false,
     quote: "Desde el primer día me sentí apoyado e inspirado. Los coaches realmente se preocupan por ayudarte a alcanzar tus metas.",
     name: "Kenneth Turner",
-    role: "Fitness Coach",
+    role: "Entrenador Personal ",
   },
 ];
 
-const BRANDS = ["Logoipsum", "Logoipsum", "Logoipsum", "Logoipsum", "Logoipsum", "Logoipsum", "Logoipsum", "Logoipsum"];
+const BRANDS = [
+  { name: "C4", src: "/c4.png", color: "#e8e8e6" },
+  { name: "Gatorade", src: "/gatorade.png", color: "#e8e8e6" },
+  { name: "Hammer Strength", src: "/hammerstrength.png", color: "#e8e8e6" },
+  { name: "ON", src: "/ON.png", color: "#e8e8e6" },
+];
 
 export default function Testimonials() {
   return (
@@ -90,7 +92,8 @@ export default function Testimonials() {
               style={{
                 borderRadius: 16,
                 overflow: "hidden",
-                minHeight: 220,
+                minHeight: item.type === "photo" ? 0 : 220,
+                aspectRatio: item.type === "photo" ? "4 / 5" : undefined,
                 background: item.type === "photo"
                   ? "#1a1a1a"
                   : (item as { accent?: boolean }).accent
@@ -107,7 +110,7 @@ export default function Testimonials() {
                   src={(item as { src: string }).src}
                   alt="Atleta"
                   style={{
-                    width: "100%", height: "100%", objectFit: "cover",
+                    width: "100%", height: "100%", objectFit: "contain",
                     objectPosition: (item as { position: string }).position === "top" ? "top center" : "center",
                     display: "block", position: "absolute", inset: 0,
                   }}
@@ -119,7 +122,7 @@ export default function Testimonials() {
                       fontFamily: "var(--font-bebas), sans-serif", fontSize: 40, lineHeight: 1,
                       display: "block", marginBottom: 12,
                       color: (item as { accent?: boolean }).accent ? "rgba(0,0,0,0.3)" : "#CCFF00",
-                    }}>"</span>
+                    }}>&quot;</span>
                     <p style={{
                       fontFamily: "var(--font-roboto), sans-serif", fontSize: 12, lineHeight: 1.65, fontWeight: 600,
                       color: (item as { accent?: boolean }).accent ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.75)",
@@ -128,7 +131,7 @@ export default function Testimonials() {
                       {(item as { quote: string }).quote}
                     </p>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 20 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 20 }}>
                     <div style={{
                       width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
                       background: (item as { accent?: boolean }).accent ? "#000" : "#CCFF00",
@@ -155,13 +158,13 @@ export default function Testimonials() {
 
         {/* Brands */}
         <motion.p
-          style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 10, fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#aaa", marginBottom: 24, textAlign: "center" }}
+          style={{ fontFamily: "var(--font-roboto), sans-serif", fontSize: 26, fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#aaa", marginBottom: 24, textAlign: "center" }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Powered by trusted brands
+          Marcas patrocinadoras
         </motion.p>
 
         <motion.div
@@ -174,18 +177,26 @@ export default function Testimonials() {
           {BRANDS.map((b, i) => (
             <motion.div
               key={i}
+              className="sponsor-logo"
               variants={fadeUp}
               style={{
-                padding: "9px 20px",
+                width: 150,
+                height: 72,
                 borderRadius: 999,
-                display: "flex", alignItems: "center", gap: 7,
-                fontFamily: "var(--font-roboto), sans-serif", fontSize: 11, fontWeight: 700,
-                background: i % 3 === 1 ? "#111" : "#e8e8e6",
-                color: i % 3 === 1 ? "#CCFF00" : "#555",
-                border: i % 3 === 1 ? "1px solid #222" : "1px solid #ddd",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                background: b.color,
+                border: "1px solid #ddd",
               }}
             >
-              <span style={{ fontSize: 9 }}>❖</span> {b}
+              <img
+                src={b.src}
+                alt={b.name}
+                style={{
+                  width: "78%", height: "68%", objectFit: "contain",
+                  filter: "grayscale(1)", opacity: 0.55,
+                  transition: "filter .3s ease, opacity .3s ease, transform .3s ease",
+                }}
+              />
             </motion.div>
           ))}
         </motion.div>
@@ -193,6 +204,8 @@ export default function Testimonials() {
       </div>
 
       <style>{`
+        .sponsor-logo img { filter: grayscale(1); }
+        .sponsor-logo:hover img { filter: grayscale(0); opacity: 1; transform: scale(1.08); }
         @media (max-width: 768px) {
           .test-grid { grid-template-columns: 1fr 1fr !important; }
         }

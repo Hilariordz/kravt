@@ -15,7 +15,7 @@ const PLANS = [
     period: "/mes",
     sub: "Clase de prueba gratis para nuevos miembros",
     accent: false,
-    image: "/atleta.png",
+    image: "/pack1.png",
     features: [
       { icon: "⚡", text: "Acceso a todo el equipo" },
       { icon: "🏃", text: "2 clases grupales por semana" },
@@ -30,7 +30,7 @@ const PLANS = [
     period: "/mes",
     sub: "Descuentos en membresías anuales",
     accent: true,
-    image: "/atleta.png",
+    image: "/pack2.png",
     features: [
       { icon: "⚡", text: "Acceso a todo el equipo" },
       { icon: "🏃", text: "2 clases grupales por semana" },
