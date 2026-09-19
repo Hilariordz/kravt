@@ -1,43 +1,19 @@
 "use client";
 
-import { useActionState } from "react";
-import { loginUser } from "@/app/actions/auth"; // Asegúrate de que esta ruta sea correcta
-import { useState } from "react";
-
-// Clases base optimizadas para inputs modernos y llamativos
-const inputCls =
-  "w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all duration-300 ease-out " +
-  "bg-black/20 border border-white/10 text-white placeholder:text-white/30 " +
-  "hover:border-white/20 hover:bg-black/30 " +
-  "focus:border-[#c8ff00] focus:bg-black/40 focus:ring-2 focus:ring-[#c8ff00]/10 focus:shadow-[inset_0_1px_2px_rgba(200,255,0,0.05)]";
+import { useActionState, useState } from "react";
+import { loginUser } from "@/app/actions/auth";
 
 export default function LoginForm() {
-  // Nota: react-dom@19 usa un orden diferente en useActionState: [state, action, isPending]
-  // Si usas React 18 con el hook experimental, el orden podría ser distinto. Asumo React 19.
   const [errorMessage, formAction, isPending] = useActionState(loginUser, undefined);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    // Contenedor principal con efecto Glassmorphism y borde sutil
-    <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/5 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.5)]">
-      
-      {/* Encabezado del Formulario */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-white tracking-tight">
-          Bienvenido
-        </h1>
-        <p className="text-sm text-white/60 mt-2 font-light">
-          Ingresa tus credenciales para acceder
-        </p>
-      </div>
+    <form action={formAction} className="login-form">
 
-      <form action={formAction} className="flex flex-col gap-4">
-
-        {/* Campo Email */}
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="text-xs font-medium text-white/70 ml-1">
-            Correo electrónico
-          </label>
+      <div className="login-field">
+        <span className="login-field-number" aria-hidden="true">01</span>
+        <div className="login-field-content">
+          <label htmlFor="email">Correo electrónico</label>
           <input
             id="email"
             name="email"
@@ -45,111 +21,202 @@ export default function LoginForm() {
             required
             autoComplete="email"
             placeholder="tu@email.com"
-            className={inputCls}
           />
         </div>
+      </div>
 
-        {/* Campo Password */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between ml-1">
-            <label htmlFor="password" className="text-xs font-medium text-white/70">
-              Contraseña
-            </label>
-            {/* Opcional: Link de recuperar contraseña */}
-            <a href="#" className="text-xs text-[#c8ff00]/80 hover:text-[#c8ff00] transition-colors">
-              ¿Olvidaste tu contraseña?
-            </a>
-          </div>
-          <div className="relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              required
-              autoComplete="current-password"
-              minLength={6}
-              placeholder="••••••••"
-              className={`${inputCls} pr-12`} // Espacio extra a la derecha para el ícono
-            />
-            {/* Botón para mostrar/ocultar contraseña con hover effect */}
+      <div className="login-field">
+        <span className="login-field-number" aria-hidden="true">02</span>
+        <div className="login-field-content">
+          <label htmlFor="password">Contraseña</label>
+          <div className="login-password-wrap">
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            required
+            autoComplete="current-password"
+            minLength={6}
+            placeholder="Mínimo 6 caracteres"
+          />
             <button
               type="button"
-              onClick={() => setShowPassword((v) => !v)}
+              onClick={() => setShowPassword((value) => !value)}
               aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-              className="absolute right-0 top-0 h-full px-3.5 flex items-center justify-center text-white/30 hover:text-[#c8ff00] transition-colors rounded-r-xl"
+              className="login-password-toggle"
             >
-              {showPassword ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-                  <line x1="1" y1="1" x2="23" y2="23" />
-                </svg>
-              ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              )}
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
             </button>
           </div>
+          <a href="#" className="login-forgot">¿La olvidaste?</a>
         </div>
-
-        {/* Mensaje de Error con diseño refinado */}
-        {errorMessage && (
-          <div className="flex items-center gap-2.5 mt-2 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-shake">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <p>{errorMessage}</p>
-          </div>
-        )}
-
-        {/* Botón de Acción Principal "Llamativo" */}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="relative mt-4 w-full py-4 rounded-xl text-[12px] uppercase font-bold tracking-[0.2em] text-black transition-all duration-300 overflow-hidden group active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:active:scale-100"
-          style={{
-            // Fondo base degradado
-            background: isPending
-              ? "#888" // Color neutro en carga
-              : "linear-gradient(135deg, #c8ff00 0%, #a3d900 100%)",
-            // Sombra exterior suave y sombra interior para efecto "brillo" superior
-            boxShadow: isPending
-              ? "none"
-              : "0 8px 20px -4px rgba(200,255,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4)",
-          }}
-        >
-          {/* Efecto de brillo hover (overlay) */}
-          <span className="absolute inset-0 w-full h-full bg-white/0 group-hover:bg-white/10 transition-colors duration-300"></span>
-          
-          {/* Contenido del botón con padding para el spinner si fuera necesario */}
-          <span className="relative flex items-center justify-center gap-2">
-            {isPending ? (
-              <>
-                {/* Spinner simple */}
-                <svg className="animate-spin h-4 w-4 text-black/60" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Iniciando...
-              </>
-            ) : (
-              "Iniciar sesión"
-            )}
-          </span>
-        </button>
-      </form>
-      
-      {/* Pie del formulario (Opcional) */}
-      <div className="mt-8 text-center text-sm text-white/40 font-light">
-        ¿No tienes cuenta?{" "}
-        <a href="#" className="font-medium text-white/80 hover:text-[#c8ff00] transition-colors">
-          Regístrate gratis
-        </a>
       </div>
-    </div>
+
+      {errorMessage && (
+        <div role="alert" className="login-error">
+          <span aria-hidden="true">!</span>
+          <p>{errorMessage}</p>
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={isPending}
+        className="login-submit"
+      >
+        <span>{isPending ? "Iniciando..." : "Iniciar sesión"}</span>
+        {!isPending && <span className="login-submit-arrow" aria-hidden="true">↗</span>}
+      </button>
+
+      <style>{`
+        .login-form { width: 100%; }
+        .login-form-meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-family: var(--font-jetbrains), monospace;
+          font-size: 9px;
+          letter-spacing: .12em;
+          line-height: 1.4;
+          text-transform: uppercase;
+        }
+        .login-form-meta { margin-bottom: 28px; color: rgba(255,255,255,.34); }
+        .login-form-meta span:first-child { color: #c8ff00; }
+        .login-field {
+          display: flex;
+          gap: 18px;
+          padding: 17px 0 15px;
+          border-top: 1px solid rgba(255,255,255,.2);
+        }
+        .login-field-number {
+          flex: 0 0 24px;
+          padding-top: 2px;
+          color: #c8ff00;
+          font-family: var(--font-jetbrains), monospace;
+          font-size: 10px;
+        }
+        .login-field-content { min-width: 0; flex: 1; }
+        .login-field-content label {
+          display: block;
+          margin-bottom: 9px;
+          color: rgba(255,255,255,.72);
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+        }
+        .login-field-content input {
+          width: 100%;
+          min-height: 34px;
+          padding: 0;
+          border: 0;
+          outline: 0;
+          background: transparent;
+          color: #fff;
+          font-size: 16px;
+        }
+        .login-field-content input::placeholder { color: rgba(255,255,255,.24); }
+        .login-field-content input:focus::placeholder { color: rgba(200,255,0,.35); }
+        .login-password-wrap { position: relative; padding-right: 42px; }
+        .login-password-toggle {
+          position: absolute;
+          top: 50%;
+          right: 0;
+          display: grid;
+          width: 32px;
+          height: 32px;
+          place-items: center;
+          border: 1px solid rgba(255,255,255,.2);
+          border-radius: 50%;
+          background: transparent;
+          color: rgba(255,255,255,.46);
+          cursor: pointer;
+          transform: translateY(-50%);
+          transition: border-color .2s, color .2s;
+        }
+        .login-password-toggle:hover, .login-password-toggle:focus-visible {
+          border-color: #c8ff00;
+          color: #c8ff00;
+          outline: none;
+        }
+        .login-forgot {
+          display: inline-block;
+          margin-top: 10px;
+          color: rgba(255,255,255,.42);
+          font-size: 11px;
+          text-decoration: underline;
+          text-decoration-color: rgba(200,255,0,.5);
+          text-underline-offset: 3px;
+        }
+        .login-forgot:hover { color: #c8ff00; }
+        .login-error {
+          display: flex;
+          gap: 10px;
+          margin: 18px 0 0;
+          padding: 12px 14px;
+          border-left: 2px solid #f87171;
+          background: rgba(248,113,113,.08);
+          color: #fca5a5;
+          font-size: 12px;
+          line-height: 1.45;
+        }
+        .login-error > span { color: #f87171; font-weight: 700; }
+        .login-submit {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          min-height: 62px;
+          margin-top: 30px;
+          padding: 8px 9px 8px 22px;
+          border: 0;
+          background: #c8ff00;
+          color: #050505;
+          cursor: pointer;
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: .16em;
+          text-transform: uppercase;
+          transition: background .2s, transform .2s;
+        }
+        .login-submit:hover { background: #d9ff52; }
+        .login-submit:active { transform: scale(.985); }
+        .login-submit:focus-visible { outline: 2px solid #c8ff00; outline-offset: 4px; }
+        .login-submit:disabled { cursor: not-allowed; opacity: .6; }
+        .login-submit-arrow {
+          display: grid;
+          width: 44px;
+          height: 44px;
+          place-items: center;
+          background: #050505;
+          color: #c8ff00;
+          font-size: 20px;
+          letter-spacing: 0;
+        }
+        @media (max-width: 480px) {
+          .login-field { gap: 13px; }
+          .login-submit { min-height: 66px; }
+        }
+      `}</style>
+    </form>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function EyeOffIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
   );
 }
